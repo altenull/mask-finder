@@ -1,6 +1,7 @@
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 
+import { MapContainer } from './app/src/map/containers/Map.container';
 import { fontWeights } from './app/src/ui/inline-styles';
 
 const GlobalStyle = createGlobalStyle`
@@ -40,10 +41,11 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <>
       <GlobalStyle />
+      <MapContainer />
     </>
   );
 };
