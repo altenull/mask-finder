@@ -1,18 +1,24 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
+import { zIndex } from '../../ui/inline-styles';
+import { FullSizeMap } from '../components/FullSizeMap';
+import { FULL_SIZE_MAP_ID } from '../variables/map.variables';
+
 declare global {
   interface Window {
     kakao: any;
   }
 }
 
-const StdFullSizeMap = styled.div`
-  width: 100vw;
-  height: 100vh;
+const StdMapPositioner = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: ${zIndex.map};
 `;
-
-const FULL_SIZE_MAP_ID: string = 'full-size-map';
 
 export const MapContainer: React.FC = () => {
   useEffect(() => {
@@ -25,5 +31,9 @@ export const MapContainer: React.FC = () => {
     const map = new window.kakao.maps.Map(container, options);
   }, []);
 
-  return <StdFullSizeMap id={FULL_SIZE_MAP_ID} />;
+  return (
+    <StdMapPositioner>
+      <FullSizeMap />
+    </StdMapPositioner>
+  );
 };
