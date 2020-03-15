@@ -18,7 +18,7 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
-    "start": "cp ./.env.dev ./.env && react-scripts start",
+    "start": "cp ./.env.local ./.env && react-scripts start",
     "start:prod": "cp ./.env.prod ./.env && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
