@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 
 import { zIndex } from '../../ui/inline-styles';
+
+interface Props {
+  setKeyword: Dispatch<SetStateAction<string>>;
+}
 
 const StdSearchInput = styled.input`
   position: absolute;
@@ -15,6 +19,18 @@ const StdSearchInput = styled.input`
   z-index: ${zIndex.searchInput};
 `;
 
-export const SearchInput: React.FC = () => {
-  return <StdSearchInput />;
+export const SearchInput: React.FC<Props> = ({ setKeyword }: Props) => {
+  const [value, setValue] = useState<string>('');
+
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value);
+  };
+
+  const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      setKeyword(value);
+    }
+  };
+
+  return <StdSearchInput type={'text'} placeholder={'검색...'} onChange={handleOnChange} onKeyUp={handleOnKeyUp} />;
 };

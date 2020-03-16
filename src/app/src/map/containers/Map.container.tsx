@@ -2,14 +2,8 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { zIndex } from '../../ui/inline-styles';
-import { FullSizeMap } from '../components/FullSizeMap';
+import { FullSizeMap } from '../components';
 import { FULL_SIZE_MAP_ID } from '../variables/map.variables';
-
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
 
 const StdMapPositioner = styled.div`
   position: absolute;

@@ -5,6 +5,12 @@ import { MapContainer } from './app/src/map/containers/Map.container';
 import { SearchContainer } from './app/src/search/containers/Search.container';
 import { fontWeights } from './app/src/ui/inline-styles';
 
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,500');
 
