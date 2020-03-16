@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { MapContext, MapContextState } from '../../core/contexts';
 import { zIndex } from '../../ui/inline-styles';
 import { FullSizeMap } from '../components';
+import { MapCoordinates } from '../models/map';
 import { getKakaoLatLng } from '../utils/map.util';
 import { FULL_SIZE_MAP_ID, MAP_MAX_LEVEL } from '../variables/map.variables';
 
@@ -17,7 +18,7 @@ const StdMapPositioner = styled.div`
 `;
 
 export const MapContainer: React.FC = () => {
-  const { kakaoMap, initKakaoMap, mapCoordinates }: MapContextState = useContext(MapContext);
+  const { kakaoMap, initKakaoMap, mapCoordinates, updateMapCoordinates }: MapContextState = useContext(MapContext);
 
   const initMap = () => {
     const container: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID);
@@ -29,6 +30,15 @@ export const MapContainer: React.FC = () => {
       });
 
       map.setMaxLevel(MAP_MAX_LEVEL);
+
+      window.kakao.maps.event.addListener(map, 'dragend', () => {
+        const mapCenter = map.getCenter();
+        const movedMapCoordinates: MapCoordinates = {
+          latitude: mapCenter.getLat(),
+          longitude: mapCenter.getLng(),
+        };
+        updateMapCoordinates(movedMapCoordinates);
+      });
 
       initKakaoMap(map);
     }
