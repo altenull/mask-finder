@@ -5,7 +5,7 @@ import { MapContext, MapContextState } from '../../core/contexts';
 import { zIndex } from '../../ui/inline-styles';
 import { FullSizeMap } from '../components';
 import { getKakaoLatLng } from '../utils/map.util';
-import { FULL_SIZE_MAP_ID } from '../variables/map.variables';
+import { FULL_SIZE_MAP_ID, MAP_MAX_LEVEL } from '../variables/map.variables';
 
 const StdMapPositioner = styled.div`
   position: absolute;
@@ -23,12 +23,14 @@ export const MapContainer: React.FC = () => {
     const container: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID);
 
     if (container != null) {
-      const options = {
+      const map = new window.kakao.maps.Map(container, {
         center: getKakaoLatLng(mapCoordinates.latitude, mapCoordinates.longitude),
-        level: 4,
-      };
+        level: MAP_MAX_LEVEL,
+      });
 
-      initKakaoMap(new window.kakao.maps.Map(container, options));
+      map.setMaxLevel(MAP_MAX_LEVEL);
+
+      initKakaoMap(map);
     }
   };
 
