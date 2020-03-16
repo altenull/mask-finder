@@ -1,3 +1,5 @@
+import { MapCoordinates } from '../../map/models/map';
+
 export interface Place {
   address_name: string;
   category_group_code: string;
@@ -18,6 +20,5 @@ export interface PlaceVM {
   name: string;
   address: string;
   roadAddress: string;
-  latitude: string;
-  longitude: string;
+  coordinates: MapCoordinates;
 }

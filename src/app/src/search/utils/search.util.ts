@@ -7,14 +7,15 @@ export const parsePlaceVMFromPlace: (place: Place) => PlaceVM = ({
   road_address_name,
   x,
   y,
-  ...rest
 }: Place) => {
   return {
     id,
     name: place_name,
     address: address_name,
     roadAddress: road_address_name,
-    latitude: y,
-    longitude: x,
+    coordinates: {
+      latitude: +y,
+      longitude: +x,
+    },
   };
 };

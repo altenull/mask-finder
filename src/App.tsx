@@ -1,6 +1,7 @@
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 
+import { MapProvider } from './app/src/core/contexts';
 import { MapContainer } from './app/src/map/containers/Map.container';
 import { SearchContainer } from './app/src/search/containers/Search.container';
 import { fontWeights } from './app/src/ui/inline-styles';
@@ -52,10 +53,12 @@ const App: React.FC = () => {
   return (
     <>
       <GlobalStyle />
-      <div style={{ position: 'relative', height: '100%' }}>
-        <SearchContainer />
-        <MapContainer />
-      </div>
+      <MapProvider>
+        <div style={{ position: 'relative', height: '100%' }}>
+          <SearchContainer />
+          <MapContainer />
+        </div>
+      </MapProvider>
     </>
   );
 };
