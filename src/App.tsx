@@ -56,7 +56,7 @@ const App: React.FC = () => {
       <GlobalStyle />
       <MapProvider>
         <div style={{ position: 'relative', height: '100%' }}>
-          {process.env.REACT_APP_ENVIRONMENT === 'development' && <DevelopmentContainer />}
+          {process.env.NODE_ENV === 'development' && <DevelopmentContainer />}
           <SearchContainer />
           <MapContainer />
         </div>
