@@ -8,8 +8,14 @@ export const useGetMaskStores = (getMaskStoresRequest: GetMaskStoresRequest) => 
   const [isGetMaskStoresLoading, setIsGetMaskStoresLoading] = useState<boolean>(false);
   const [getMaskStoresError, setGetMaskStoresError] = useState(null);
 
-  const fetchData = async () => {
+  const init = () => {
+    setMaskStores([]);
+    setIsGetMaskStoresLoading(false);
     setGetMaskStoresError(null);
+  };
+
+  const fetchData = async () => {
+    init();
 
     try {
       setIsGetMaskStoresLoading(true);
