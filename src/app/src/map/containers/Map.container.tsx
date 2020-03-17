@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { MapContext, MapContextState } from '../../core/contexts';
+import { useGetMaskStores } from '../../mask-finder-api/hooks/mask-store.hook';
 import { zIndex } from '../../ui/inline-styles';
 import { FullSizeMap } from '../components';
 import { MapCoordinates } from '../models/map';
@@ -53,6 +54,8 @@ export const MapContainer: React.FC = () => {
       kakaoMap.panTo(getKakaoLatLng(mapCoordinates.latitude, mapCoordinates.longitude));
     }
   }, [mapCoordinates]);
+
+  const [maskStores, isGetMaskStoresLoading, getMaskStoresError] = useGetMaskStores({ mapCoordinates, distance: 2000 });
 
   return (
     <StdMapPositioner>
