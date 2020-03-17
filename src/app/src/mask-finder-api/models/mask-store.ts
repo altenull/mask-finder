@@ -9,9 +9,9 @@ export interface MaskStore {
   type: string;
   lat: number;
   lng: number;
-  remain_stat: string;
-  stock_at: string; // YYYY/MM/DD HH:mm:s
-  created_at: string; // YYYY/MM/DD HH:mm:s
+  remain_stat: string | null;
+  stock_at: string | null; // YYYY/MM/DD HH:mm:s
+  created_at: string | null; // YYYY/MM/DD HH:mm:s
 }
 
 export interface MaskStoreVM {
@@ -20,9 +20,9 @@ export interface MaskStoreVM {
   roadAddress: string;
   mapCoordinates: MapCoordinates;
   type: MaskStoreType;
-  remainStatus: RemainStatus;
-  stockDateTime: string; // YYYY/MM/DD HH:mm:s
-  createdDateTime: string; // YYYY/MM/DD HH:mm:s
+  remainStatus: RemainStatus | null;
+  stockDateTime: string | null; // YYYY/MM/DD HH:mm:s
+  createdDateTime: string | null; // YYYY/MM/DD HH:mm:s
 }
 
 export interface GetMaskStoresRequest {
