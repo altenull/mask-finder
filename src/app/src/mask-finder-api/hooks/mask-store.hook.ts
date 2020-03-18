@@ -31,5 +31,5 @@ export const useGetMaskStores = (getMaskStoresRequest: GetMaskStoresRequest) => 
     fetchData();
   }, [getMaskStoresRequest.mapCoordinates]);
 
-  return [maskStores, isGetMaskStoresLoading, getMaskStoresError];
+  return { maskStores, isGetMaskStoresLoading, getMaskStoresError };
 };

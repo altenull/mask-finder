@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 import { MapContext, MapContextState } from '../../core/contexts';
 import { useGetMaskStores } from '../../mask-finder-api/hooks/mask-store.hook';
+import { MaskStoreVM } from '../../mask-finder-api/models/mask-store';
 import { zIndex } from '../../ui/inline-styles';
 import { FullSizeMap } from '../components';
-import { MapCoordinates } from '../models/map';
 import { getKakaoLatLng } from '../utils/map.util';
 import { FULL_SIZE_MAP_ID, MAP_MAX_LEVEL } from '../variables/map.variables';
 
@@ -33,12 +33,11 @@ export const MapContainer: React.FC = () => {
       map.setMaxLevel(MAP_MAX_LEVEL);
 
       window.kakao.maps.event.addListener(map, 'dragend', () => {
-        const mapCenter = map.getCenter();
-        const movedMapCoordinates: MapCoordinates = {
-          latitude: mapCenter.getLat(),
-          longitude: mapCenter.getLng(),
-        };
-        updateMapCoordinates(movedMapCoordinates);
+        const movedMapCenter = map.getCenter();
+        updateMapCoordinates({
+          latitude: movedMapCenter.getLat(),
+          longitude: movedMapCenter.getLng(),
+        });
       });
 
       initKakaoMap(map);
@@ -55,7 +54,44 @@ export const MapContainer: React.FC = () => {
     }
   }, [mapCoordinates]);
 
-  const [maskStores, isGetMaskStoresLoading, getMaskStoresError] = useGetMaskStores({ mapCoordinates, distance: 2000 });
+  const { maskStores, isGetMaskStoresLoading, getMaskStoresError } = useGetMaskStores({
+    mapCoordinates,
+    distance: 2000,
+  });
+
+  let cachedMarkers: any[] = [];
+
+  useEffect(() => {
+    if (kakaoMap != null) {
+      cachedMarkers.forEach((cachedMarker) => {
+        cachedMarker.setMap(null);
+      });
+
+      const positions = maskStores.map((maskStore: MaskStoreVM) => ({
+        title: maskStore.name,
+        latLng: getKakaoLatLng(maskStore.mapCoordinates.latitude, maskStore.mapCoordinates.longitude),
+      }));
+
+      const imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
+      const imageSize = new window.kakao.maps.Size(24, 35);
+      const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+
+      const markers = positions.map(
+        (position) =>
+          new window.kakao.maps.Marker({
+            position: position.latLng,
+            title: position.title,
+            image: markerImage,
+          })
+      );
+
+      cachedMarkers = markers;
+
+      cachedMarkers.forEach((cachedMarker) => {
+        cachedMarker.setMap(kakaoMap);
+      });
+    }
+  }, [maskStores]);
 
   return (
     <StdMapPositioner>
