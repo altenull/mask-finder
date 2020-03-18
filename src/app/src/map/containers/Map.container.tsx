@@ -6,7 +6,7 @@ import { useGetMaskStores } from '../../mask-finder-api/hooks/mask-store.hook';
 import { MaskStoreVM } from '../../mask-finder-api/models/mask-store';
 import { zIndex } from '../../ui/inline-styles';
 import { FullSizeMap } from '../components';
-import { getKakaoLatLng } from '../utils/map.util';
+import { createKakaoLatLngInstance, createKakaoMapInstance } from '../utils/map.util';
 import { FULL_SIZE_MAP_ID, MAP_MAX_LEVEL } from '../variables/map.variables';
 
 const StdMapPositioner = styled.div`
@@ -25,10 +25,7 @@ export const MapContainer: React.FC = () => {
     const container: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID);
 
     if (container != null) {
-      const map = new window.kakao.maps.Map(container, {
-        center: getKakaoLatLng(mapCoordinates.latitude, mapCoordinates.longitude),
-        level: MAP_MAX_LEVEL,
-      });
+      const map = createKakaoMapInstance(container, mapCoordinates, MAP_MAX_LEVEL);
 
       map.setMaxLevel(MAP_MAX_LEVEL);
 
@@ -50,7 +47,7 @@ export const MapContainer: React.FC = () => {
 
   useEffect(() => {
     if (kakaoMap != null) {
-      kakaoMap.panTo(getKakaoLatLng(mapCoordinates.latitude, mapCoordinates.longitude));
+      kakaoMap.panTo(createKakaoLatLngInstance(mapCoordinates));
     }
   }, [mapCoordinates]);
 
@@ -69,7 +66,7 @@ export const MapContainer: React.FC = () => {
 
       const positions = maskStores.map((maskStore: MaskStoreVM) => ({
         title: maskStore.name,
-        latLng: getKakaoLatLng(maskStore.mapCoordinates.latitude, maskStore.mapCoordinates.longitude),
+        latLng: createKakaoLatLngInstance(maskStore.mapCoordinates),
       }));
 
       const imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
