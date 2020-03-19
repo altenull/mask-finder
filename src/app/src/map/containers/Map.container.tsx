@@ -58,7 +58,7 @@ export const MapContainer: React.FC = () => {
 
   const { maskStores, isGetMaskStoresLoading, getMaskStoresError } = useGetMaskStores({
     mapCoordinates,
-    distance: 2000,
+    distance: 1000,
   });
 
   let cachedMarkers: any[] = [];
