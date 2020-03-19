@@ -4,6 +4,7 @@ import markerRed from '../../../assets/images/map/marker_red.png';
 import markerYellow from '../../../assets/images/map/marker_yellow.png';
 import { RemainStatus } from '../../mask-finder-api/enums/remain-status.enum';
 import { MaskStoreVM } from '../../mask-finder-api/models/mask-store';
+import { inlineZIndex } from '../../ui/inline-styles';
 import { MapCoordinates, MaskStoreMarker } from '../models/map';
 
 export const createKakaoMapInstance = (container: HTMLElement, mapCoordinates: MapCoordinates, level: number) =>
@@ -15,11 +16,12 @@ export const createKakaoMapInstance = (container: HTMLElement, mapCoordinates: M
 export const createKakaoLatLngInstance = ({ latitude, longitude }: MapCoordinates) =>
   new window.kakao.maps.LatLng(latitude, longitude);
 
-export const createKakaoMarkerInstance = ({ title, position, image }: MaskStoreMarker) =>
+export const createKakaoMarkerInstance = ({ title, position, image, zIndex }: MaskStoreMarker) =>
   new window.kakao.maps.Marker({
     position,
     title,
     image,
+    zIndex,
   });
 
 export const getMarkerImageSrc = (remainStatus: RemainStatus | null): string => {
@@ -43,5 +45,11 @@ export const getMaskStoreMarkers = (maskStores: MaskStoreVM[]): MaskStoreMarker[
       title: maskStore.name,
       position: createKakaoLatLngInstance(maskStore.mapCoordinates),
       image: markerImage,
+      zIndex:
+        maskStore.remainStatus === RemainStatus.Plenty ||
+        maskStore.remainStatus === RemainStatus.Some ||
+        maskStore.remainStatus === RemainStatus.Few
+          ? inlineZIndex.colorMarker
+          : inlineZIndex.grayMarker,
     };
   });

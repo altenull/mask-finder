@@ -9,3 +9,11 @@ export const fontWeights = {
   heavy: 800,
   black: 900,
 };
+
+export const inlineZIndex = {
+  map: 800,
+  grayMarker: 880,
+  colorMarker: 890,
+  searchInput: 1000,
+  development: 1100,
+};

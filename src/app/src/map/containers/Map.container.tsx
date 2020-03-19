@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { MapContext, MapContextState } from '../../core/contexts';
 import { useGetMaskStores } from '../../mask-finder-api/hooks/mask-store.hook';
-import { zIndex } from '../../ui/inline-styles';
+import { inlineZIndex } from '../../ui/inline-styles';
 import { FullSizeMap } from '../components';
 import { MaskStoreMarker } from '../models/map';
 import {
@@ -20,7 +20,7 @@ const StdMapPositioner = styled.div`
   top: 0;
   right: 0;
   bottom: 0;
-  z-index: ${zIndex.map};
+  z-index: ${inlineZIndex.map};
 `;
 
 export const MapContainer: React.FC = () => {

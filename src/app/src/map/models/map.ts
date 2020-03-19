@@ -7,4 +7,5 @@ export interface MaskStoreMarker {
   title: any;
   position: any;
   image: any;
+  zIndex: number;
 }

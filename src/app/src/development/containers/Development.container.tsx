@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { MapContext, MapContextState } from '../../core/contexts';
-import { zIndex } from '../../ui/inline-styles';
+import { inlineZIndex } from '../../ui/inline-styles';
 
 const StdDevelopmentPositioner = styled.div`
   position: absolute;
@@ -10,7 +10,7 @@ const StdDevelopmentPositioner = styled.div`
   bottom: 40px;
   background-color: rgba(255, 255, 255, 0.7);
   padding: 8px;
-  z-index: ${zIndex.development};
+  z-index: ${inlineZIndex.development};
 `;
 
 export const DevelopmentContainer: React.FC = () => {

@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 
-import { zIndex } from '../../ui/inline-styles';
+import { inlineZIndex } from '../../ui/inline-styles';
 
 interface Props {
   setKeyword: Dispatch<SetStateAction<string>>;
@@ -16,7 +16,7 @@ const StdSearchInput = styled.input`
   font-size: 24px;
   padding: 12px;
   border: 1px solid #bdbdbd;
-  z-index: ${zIndex.searchInput};
+  z-index: ${inlineZIndex.searchInput};
 `;
 
 export const SearchInput: React.FC<Props> = ({ setKeyword }: Props) => {
