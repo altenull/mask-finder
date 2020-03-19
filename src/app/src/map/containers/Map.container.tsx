@@ -3,10 +3,15 @@ import styled from 'styled-components';
 
 import { MapContext, MapContextState } from '../../core/contexts';
 import { useGetMaskStores } from '../../mask-finder-api/hooks/mask-store.hook';
-import { MaskStoreVM } from '../../mask-finder-api/models/mask-store';
 import { zIndex } from '../../ui/inline-styles';
 import { FullSizeMap } from '../components';
-import { createKakaoLatLngInstance, createKakaoMapInstance } from '../utils/map.util';
+import { MaskStoreMarker } from '../models/map';
+import {
+  createKakaoLatLngInstance,
+  createKakaoMapInstance,
+  createKakaoMarkerInstance,
+  getMaskStoreMarkers,
+} from '../utils/map.util';
 import { FULL_SIZE_MAP_ID, MAP_MAX_LEVEL } from '../variables/map.variables';
 
 const StdMapPositioner = styled.div`
@@ -64,25 +69,12 @@ export const MapContainer: React.FC = () => {
         cachedMarker.setMap(null);
       });
 
-      const positions = maskStores.map((maskStore: MaskStoreVM) => ({
-        title: maskStore.name,
-        latLng: createKakaoLatLngInstance(maskStore.mapCoordinates),
-      }));
-
-      const imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
-      const imageSize = new window.kakao.maps.Size(24, 35);
-      const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
-
-      const markers = positions.map(
-        (position) =>
-          new window.kakao.maps.Marker({
-            position: position.latLng,
-            title: position.title,
-            image: markerImage,
-          })
+      const maskStoreMarkers: MaskStoreMarker[] = getMaskStoreMarkers(maskStores);
+      const kakaoMarkers = maskStoreMarkers.map((maskStoreMarker: MaskStoreMarker) =>
+        createKakaoMarkerInstance(maskStoreMarker)
       );
 
-      cachedMarkers = markers;
+      cachedMarkers = kakaoMarkers;
 
       cachedMarkers.forEach((cachedMarker) => {
         cachedMarker.setMap(kakaoMap);
