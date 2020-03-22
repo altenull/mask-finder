@@ -14,6 +14,7 @@ export const inlineZIndex = {
   map: 800,
   grayMarker: 880,
   colorMarker: 890,
+  tooltip: 900,
   searchInput: 1000,
   development: 1100,
 };

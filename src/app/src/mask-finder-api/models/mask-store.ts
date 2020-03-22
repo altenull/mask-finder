@@ -22,7 +22,7 @@ export interface MaskStoreVM {
   type: MaskStoreType;
   remainStatus: RemainStatus | null;
   stockDateTime: string | null; // YYYY/MM/DD HH:mm:s
-  createdDateTime: string | null; // YYYY/MM/DD HH:mm:s
+  updatedDateTime: string | null; // YYYY/MM/DD HH:mm:s
 }
 
 export interface GetMaskStoresRequest {

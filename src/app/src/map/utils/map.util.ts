@@ -53,3 +53,26 @@ export const getMaskStoreMarkers = (maskStores: MaskStoreVM[]): MaskStoreMarker[
           : inlineZIndex.grayMarker,
     };
   });
+
+export const getMaskStoreTooltipContent = ({
+  id,
+  name,
+  roadAddress,
+  mapCoordinates,
+  type,
+  remainStatus,
+  stockDateTime,
+  updatedDateTime,
+}: MaskStoreVM) => `
+<div class="mask-store-tooltip">
+  <div class="mask-store-tooltip__top-group">
+    <h2 class="mask-store-tooltip__name">${name}</h2>
+    <p class="mask-store-tooltip__address">${roadAddress}</p>
+  </div>
+  <div class="mask-store-tooltip__bottom-group">
+    <h2 class="mask-store-tooltip__remain-status">${remainStatus}</h2>
+    ${stockDateTime != null ? `<p class="mask-store-tooltip__stock-time">입고시간 ${stockDateTime}</p>` : ''}
+    ${updatedDateTime != null ? `<p class="mask-store-tooltip__update-time">업데이트 ${updatedDateTime}</p>` : ''}
+  </div>
+</div>
+`;

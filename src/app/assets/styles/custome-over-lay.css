@@ -1,0 +1,62 @@
+.mask-store-tooltip {
+  position: relative;
+  width: 280px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.mask-store-tooltip::after {
+  position: absolute;
+  left: 64px;
+  top: 100%;
+  border: solid transparent;
+  content: ' ';
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  border-top-color: #e9ecee;
+  border-width: 24px;
+  margin-left: -24px;
+}
+
+.mask-store-tooltip__top-group,
+.mask-store-tooltip__bottom-group {
+  width: 100%;
+  height: 120px;
+  margin: 0;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.mask-store-tooltip__top-group {
+  background-color: #f8f9fa;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.mask-store-tooltip__bottom-group {
+  background-color: #e9ecee;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.mask-store-tooltip__name {
+  margin-bottom: 16px;
+}
+
+.mask-store-tooltip__address {
+  font-size: 0.9375rem;
+}
+
+.mask-store-tooltip__remain-status {
+  margin-bottom: 16px;
+}
+
+.mask-store-tooltip__stock-time {
+  font-size: 0.875rem;
+}
+
+.mask-store-tooltip__update-time {
+  font-size: 0.875rem;
+}

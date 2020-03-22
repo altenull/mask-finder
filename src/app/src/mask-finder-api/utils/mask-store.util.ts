@@ -24,6 +24,6 @@ export const parseMaskStoreVMFromMaskStore = ({
     type: type as MaskStoreType,
     remainStatus: remain_stat as RemainStatus,
     stockDateTime: stock_at,
-    createdDateTime: created_at,
+    updatedDateTime: created_at,
   };
 };
