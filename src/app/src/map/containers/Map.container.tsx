@@ -67,26 +67,6 @@ export const MapContainer: React.FC = () => {
   let cachedMarkers: any[] = [];
 
   useEffect(() => {
-    // // 마커 위에 커스텀오버레이를 표시합니다
-    // // 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
-    // var overlay = new kakao.maps.CustomOverlay({
-    //   content: content,
-    //   map: map,
-    //   position: marker.getPosition()
-    // });
-
-    // // 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
-    // kakao.maps.event.addListener(marker, 'click', function() {
-    //   overlay.setMap(map);
-    // });
-
-    // var clickHandler = function(event) {
-    //   alert('click: ' + event.latLng.toString());
-    // };
-
-    // kakao.maps.event.addListener(map, 'click', clickHandler);
-    // kakao.maps.event.removeListener(map, 'click', clickHandler);
-
     if (kakaoMap != null) {
       cachedMarkers.forEach((cachedMarker) => {
         cachedMarker.setMap(null);
