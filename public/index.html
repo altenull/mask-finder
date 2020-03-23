@@ -17,5 +17,12 @@
       type="text/javascript"
       src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%REACT_APP_KAKAO_MAP_KEY%&libraries=services"
     ></script>
+    <script>
+      function removeMaskStoreTooltip() {
+        window.overLaies.forEach((oldOverLay) => {
+          oldOverLay.setMap(null);
+        });
+      }
+    </script>
   </body>
 </html>

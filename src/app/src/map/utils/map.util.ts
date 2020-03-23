@@ -16,12 +16,13 @@ export const createKakaoMapInstance = (container: HTMLElement, mapCoordinates: M
 export const createKakaoLatLngInstance = ({ latitude, longitude }: MapCoordinates) =>
   new window.kakao.maps.LatLng(latitude, longitude);
 
-export const createKakaoMarkerInstance = ({ title, position, image, zIndex }: MaskStoreMarker) =>
+export const createKakaoMarkerInstance = ({ title, position, image, zIndex }: MaskStoreMarker, map: any) =>
   new window.kakao.maps.Marker({
     position,
     title,
     image,
     zIndex,
+    map,
   });
 
 export const getMarkerImageSrc = (remainStatus: RemainStatus | null): string => {
@@ -66,6 +67,7 @@ export const getMaskStoreTooltipContent = ({
 }: MaskStoreVM) => `
 <div class="mask-store-tooltip">
   <div class="mask-store-tooltip__top-group">
+    <button class="mask-store-tooltip__close-button" onclick="removeMaskStoreTooltip()">X</button>
     <h2 class="mask-store-tooltip__name">${name}</h2>
     <p class="mask-store-tooltip__address">${roadAddress}</p>
   </div>

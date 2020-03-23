@@ -2,6 +2,7 @@ import '../../../assets/styles/custome-over-lay.css';
 
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
+import { isArray } from 'util';
 
 import { MapContext, MapContextState } from '../../core/contexts';
 import { useGetMaskStores } from '../../mask-finder-api/hooks/mask-store.hook';
@@ -64,37 +65,46 @@ export const MapContainer: React.FC = () => {
     distance: 1000,
   });
 
-  let cachedMarkers: any[] = [];
+  const removeMarkersFromMap = () => {
+    if (isArray(window.markers)) {
+      window.markers.forEach((marker: any) => {
+        marker.setMap(null);
+      });
+    }
+  };
+
+  const removeOverLaiesFromMap = () => {
+    if (isArray(window.overLaies)) {
+      window.overLaies.forEach((overLay: any) => {
+        overLay.setMap(null);
+      });
+    }
+  };
 
   useEffect(() => {
     if (kakaoMap != null) {
-      cachedMarkers.forEach((cachedMarker) => {
-        cachedMarker.setMap(null);
-      });
+      removeMarkersFromMap();
+      removeOverLaiesFromMap();
 
-      const maskStoreMarkers: MaskStoreMarker[] = getMaskStoreMarkers(maskStores);
-      const kakaoMarkers = maskStoreMarkers.map((maskStoreMarker: MaskStoreMarker) =>
-        createKakaoMarkerInstance(maskStoreMarker)
+      window.markers = getMaskStoreMarkers(maskStores).map((maskStoreMarker: MaskStoreMarker) =>
+        createKakaoMarkerInstance(maskStoreMarker, kakaoMap)
       );
 
-      cachedMarkers = kakaoMarkers;
-
-      cachedMarkers.forEach((cachedMarker) => {
-        cachedMarker.setMap(kakaoMap);
-      });
-
-      cachedMarkers.forEach((cachedMarker, index) => {
-        window.kakao.maps.event.addListener(cachedMarker, 'click', function() {
-          const overlay = new window.kakao.maps.CustomOverlay({
+      window.overLaies = window.markers.map(
+        (marker: any, index: number) =>
+          new window.kakao.maps.CustomOverlay({
             content: getMaskStoreTooltipContent(maskStores[index]),
-            map: kakaoMap,
-            position: cachedMarker.getPosition(),
+            position: marker.getPosition(),
             xAnchor: 0.23,
             yAnchor: 1.34,
             zIndex: inlineZIndex.tooltip,
-          });
+          })
+      );
 
-          overlay.setMap(kakaoMap);
+      window.markers.forEach((marker: any, index: number) => {
+        window.kakao.maps.event.addListener(marker, 'click', function() {
+          removeOverLaiesFromMap();
+          window.overLaies[index].setMap(kakaoMap);
         });
       });
     }

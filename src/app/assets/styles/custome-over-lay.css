@@ -3,7 +3,6 @@
   width: 280px;
   height: auto;
   border-radius: 8px;
-  pointer-events: none;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
@@ -31,6 +30,7 @@
 }
 
 .mask-store-tooltip__top-group {
+  position: relative;
   background-color: #f8f9fa;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
@@ -40,6 +40,15 @@
   background-color: #e9ecee;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+}
+
+.mask-store-tooltip__close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  padding: 0;
 }
 
 .mask-store-tooltip__name {

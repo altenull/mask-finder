@@ -10,6 +10,8 @@ import { fontWeights } from './app/src/ui/inline-styles';
 declare global {
   interface Window {
     kakao: any;
+    overLaies: any;
+    markers: any;
   }
 }
 
