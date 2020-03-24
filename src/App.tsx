@@ -16,12 +16,12 @@ declare global {
 }
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,500');
+  @import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500&display=swap&subset=korean');
 
   html, body {
     margin: 0;
-    font-family: 'Roboto', Arial, sans-serif;
-    font-weight: ${fontWeights.ultraLight};
+    font-family: 'Noto Sans KR', Arial, sans-serif;
+    font-weight: ${fontWeights.regular};
     font-size: 16px;
     height: 100%;
     min-height: 100%;
@@ -30,6 +30,7 @@ const GlobalStyle = createGlobalStyle`
 
   h1, h2, h3, h4, h5, h6 {
     margin: 0;
+    font-weight: ${fontWeights.medium};
   }
 
   p {
