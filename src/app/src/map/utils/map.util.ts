@@ -64,17 +64,30 @@ export const getMaskStoreTooltipContent = ({
   remainStatus,
   stockDateTime,
   updatedDateTime,
-}: MaskStoreVM) => `
-<div class="mask-store-tooltip">
-  <div class="mask-store-tooltip__top-group">
-    <button class="mask-store-tooltip__close-button" onclick="removeMaskStoreTooltip()">X</button>
-    <h2 class="mask-store-tooltip__name">${name}</h2>
-    <p class="mask-store-tooltip__address">${roadAddress}</p>
-  </div>
-  <div class="mask-store-tooltip__bottom-group">
-    <h2 class="mask-store-tooltip__remain-status">${remainStatus}</h2>
-    ${stockDateTime != null ? `<p class="mask-store-tooltip__stock-time">입고시간 ${stockDateTime}</p>` : ''}
-    ${updatedDateTime != null ? `<p class="mask-store-tooltip__update-time">업데이트 ${updatedDateTime}</p>` : ''}
-  </div>
-</div>
-`;
+}: MaskStoreVM) => {
+  const remainStatusTextMap: { [key: string]: string } = {
+    [RemainStatus.Plenty]: '많음(100개 이상)',
+    [RemainStatus.Some]: '보통(30 ~ 99개)',
+    [RemainStatus.Few]: '적음(2 ~ 29개)',
+    [RemainStatus.Empty]: '없음(1개 이하)',
+  };
+
+  return `
+    <div class="mask-store-tooltip">
+      <div class="mask-store-tooltip__top-group">
+        <button class="mask-store-tooltip__close-button" onclick="removeMaskStoreTooltip()">X</button>
+        <h2 class="mask-store-tooltip__name">${name}</h2>
+        <p class="mask-store-tooltip__address">${roadAddress}</p>
+      </div>
+      <div class="mask-store-tooltip__bottom-group">
+        <h2 class="mask-store-tooltip__remain-status">${
+          remainStatus === RemainStatus.Break
+            ? '판매 중지'
+            : `재고 상태: ${remainStatus != null ? remainStatusTextMap[remainStatus] : '정보 없음'}`
+        }</h2>
+        ${stockDateTime != null ? `<p class="mask-store-tooltip__stock-time">입고시간 ${stockDateTime}</p>` : ''}
+        ${updatedDateTime != null ? `<p class="mask-store-tooltip__update-time">업데이트 ${updatedDateTime}</p>` : ''}
+      </div>
+    </div>
+  `;
+};
