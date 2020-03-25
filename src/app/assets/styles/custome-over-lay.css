@@ -56,7 +56,9 @@
 }
 
 .mask-store-tooltip__address {
-  font-size: 0.9375rem;
+  font-size: 0.8125rem;
+  display: block;
+  white-space: normal;
 }
 
 .mask-store-tooltip__remain-status {
