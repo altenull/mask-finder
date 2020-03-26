@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - name: checkout source code
-        uses: altenull/mask-finder@master
+        uses: actions/checkout@master
 
       - name: install Dependencies
         run: npm install
