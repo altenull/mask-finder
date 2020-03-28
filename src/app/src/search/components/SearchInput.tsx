@@ -8,12 +8,10 @@ interface Props {
 }
 
 const StdSearchInput = styled.input`
-  position: absolute;
-  left: 40px;
-  top: 40px;
+  position: relative;
   width: 320px;
-  height: 48px;
-  font-size: 24px;
+  height: 40px;
+  font-size: 16px;
   padding: 12px;
   border: 1px solid #bdbdbd;
   z-index: ${inlineZIndex.searchInput};

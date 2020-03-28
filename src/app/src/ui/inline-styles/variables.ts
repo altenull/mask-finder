@@ -1,4 +1,4 @@
-export const fontWeights = {
+export const inlineFontWeights = {
   thin: 100,
   ultraLight: 200,
   light: 300,
@@ -17,4 +17,18 @@ export const inlineZIndex = {
   tooltip: 900,
   searchInput: 1000,
   development: 1100,
+};
+
+export const inlineColors = {
+  gray0: '#eeeeee',
+  gray1: '#cccccc',
+  gray2: '#999999',
+  gray3: '#666666',
+  gray4: '#333333',
+};
+
+export const inlineStyles = {
+  header: {
+    height: '60px',
+  },
 };

@@ -1,11 +1,11 @@
 import React from 'react';
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
 import { MapProvider } from './app/src/core/contexts';
 import { DevelopmentContainer } from './app/src/development/containers/Development.container';
 import { MapContainer } from './app/src/map/containers/Map.container';
 import { SearchContainer } from './app/src/search/containers/Search.container';
-import { fontWeights } from './app/src/ui/inline-styles';
+import { inlineColors, inlineFontWeights, inlineStyles } from './app/src/ui/inline-styles';
 
 declare global {
   interface Window {
@@ -21,7 +21,7 @@ const GlobalStyle = createGlobalStyle`
   html, body {
     margin: 0;
     font-family: 'Noto Sans KR', Arial, sans-serif;
-    font-weight: ${fontWeights.regular};
+    font-weight: ${inlineFontWeights.regular};
     font-size: 16px;
     height: 100%;
     min-height: 100%;
@@ -30,7 +30,7 @@ const GlobalStyle = createGlobalStyle`
 
   h1, h2, h3, h4, h5, h6 {
     margin: 0;
-    font-weight: ${fontWeights.medium};
+    font-weight: ${inlineFontWeights.medium};
   }
 
   p {
@@ -53,16 +53,36 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const StdPageHeader = styled.header`
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: ${inlineStyles.header.height};
+  padding: 0 24px;
+  background-color: #ffffff;
+  border-bottom: 1px solid ${inlineColors.gray1};
+`;
+
+const StdPageBody = styled.section`
+  position: relative;
+  display: block;
+  width: 100%;
+  height: calc(100% - ${inlineStyles.header.height});
+`;
+
 const App: React.FC = () => {
   return (
     <>
       <GlobalStyle />
       <MapProvider>
-        <div style={{ position: 'relative', height: '100%' }}>
-          {process.env.NODE_ENV === 'development' && <DevelopmentContainer />}
+        <StdPageHeader>
           <SearchContainer />
+        </StdPageHeader>
+        <StdPageBody>
+          {process.env.NODE_ENV === 'development' && <DevelopmentContainer />}
           <MapContainer />
-        </div>
+        </StdPageBody>
       </MapProvider>
     </>
   );
