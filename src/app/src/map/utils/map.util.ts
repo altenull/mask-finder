@@ -59,7 +59,7 @@ export const getMaskStoreTooltipContent = ({
   id,
   name,
   roadAddress,
-  mapCoordinates,
+  mapCoordinates: { latitude, longitude },
   type,
   remainStatus,
   stockDateTime,
@@ -71,6 +71,7 @@ export const getMaskStoreTooltipContent = ({
     [RemainStatus.Few]: '적음(2 ~ 29개)',
     [RemainStatus.Empty]: '없음(1개 이하)',
   };
+  const findRouteLink: string = `https://map.kakao.com/link/to/${name},${latitude},${longitude}`;
 
   return `
     <div class="mask-store-tooltip">
@@ -78,6 +79,7 @@ export const getMaskStoreTooltipContent = ({
         <button class="mask-store-tooltip__close-button" onclick="removeMaskStoreTooltip()">X</button>
         <h2 class="mask-store-tooltip__name">${name}</h2>
         <p class="mask-store-tooltip__address">${roadAddress}</p>
+        <a class="mask-store-tooltip__find-route" href="${findRouteLink}" rel="noopener" target="_blank">길찾기</a>
       </div>
       <div class="mask-store-tooltip__bottom-group">
         <h2 class="mask-store-tooltip__remain-status">${
