@@ -81,11 +81,12 @@ export const getMaskStoreTooltipContent = ({
         <p class="mask-store-tooltip__address">${roadAddress}</p>
         <a class="mask-store-tooltip__find-route" href="${findRouteLink}" rel="noopener" target="_blank">길찾기</a>
       </div>
+      <div class="mask-store-tooltip__diagonal-divider"></div>
       <div class="mask-store-tooltip__bottom-group">
         <h2 class="mask-store-tooltip__remain-status">${
           remainStatus === RemainStatus.Break
             ? '판매 중지'
-            : `재고 상태: ${remainStatus != null ? remainStatusTextMap[remainStatus] : '정보 없음'}`
+            : `${remainStatus != null ? remainStatusTextMap[remainStatus] : '정보 없음'}`
         }</h2>
         ${stockDateTime != null ? `<p class="mask-store-tooltip__stock-time">입고시간 ${stockDateTime}</p>` : ''}
         ${updatedDateTime != null ? `<p class="mask-store-tooltip__update-time">업데이트 ${updatedDateTime}</p>` : ''}
