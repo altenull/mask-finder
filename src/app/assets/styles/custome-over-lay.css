@@ -70,6 +70,25 @@
   white-space: normal;
 }
 
+.mask-store-tooltip__find-route {
+  position: absolute;
+  right: 56px;
+  bottom: -56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #999999;
+  color: #ffffff;
+  width: 56px;
+  height: 56px;
+  max-width: 56px;
+  max-height: 56px;
+  border-radius: 50%;
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+}
+
 .mask-store-tooltip__remain-status {
   text-align: right;
   transform: translateY(-16px);
