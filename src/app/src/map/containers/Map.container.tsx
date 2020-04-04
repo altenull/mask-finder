@@ -99,6 +99,12 @@ export const MapContainer: React.FC = () => {
     }
   };
 
+  const showOverlayOfSelectedMarker = (index: number, kakaoMap: any) => {
+    if (isArray(window.overLaies)) {
+      window.overLaies[index].setMap(kakaoMap);
+    }
+  };
+
   useEffect(() => {
     if (kakaoMap != null) {
       removeMarkersFromMap();
@@ -132,7 +138,8 @@ export const MapContainer: React.FC = () => {
       window.markers.forEach((marker: any, index: number) => {
         window.kakao.maps.event.addListener(marker, 'click', function() {
           removeOverLaiesFromMap();
-          window.overLaies[index].setMap(kakaoMap);
+          showOverlayOfSelectedMarker(index, kakaoMap);
+          kakaoMap.panTo(marker.getPosition());
         });
       });
     }
