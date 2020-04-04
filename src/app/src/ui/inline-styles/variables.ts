@@ -16,6 +16,7 @@ export const inlineZIndex = {
   colorMarker: 890,
   tooltip: 900,
   searchInput: 1000,
+  searchInputIcon: 1010,
   development: 1100,
 };
 
