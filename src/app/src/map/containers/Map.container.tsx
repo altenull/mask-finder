@@ -9,7 +9,7 @@ import { RemainStatus } from '../../mask-finder-api/enums/remain-status.enum';
 import { useGetMaskStores } from '../../mask-finder-api/hooks/mask-store.hook';
 import { MaskStoreVM } from '../../mask-finder-api/models/mask-store';
 import { inlineZIndex } from '../../ui/inline-styles';
-import { FullSizeMap } from '../components';
+import { FullSizeMap, GeoLocationButton } from '../components';
 import { MaskStoreMarker } from '../models/map';
 import {
   createKakaoLatLngInstance,
@@ -36,6 +36,15 @@ const StdFilterButton = styled.button`
   width: 80px;
   height: 40px;
   z-index: 1000;
+`;
+
+const StdGeoLocationButton = styled(GeoLocationButton)`
+  && {
+    position: absolute;
+    right: 8px;
+    top: 80px;
+    z-index: 1000;
+  }
 `;
 
 export const MapContainer: React.FC = () => {
@@ -150,6 +159,8 @@ export const MapContainer: React.FC = () => {
       <StdFilterButton onClick={() => toggleStockFilter()}>
         {shouldFilterOnlyInStock ? 'In Stock' : 'All'}
       </StdFilterButton>
+
+      <StdGeoLocationButton />
       <FullSizeMap />
     </StdMapPositioner>
   );
