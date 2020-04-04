@@ -5,6 +5,7 @@ import { LocationIcon } from '../../ui/icons';
 
 interface GeoLocationButtonProps {
   className?: string;
+  handleClick: () => void;
 }
 
 const StdButtonWrapper = styled.button`
@@ -18,9 +19,12 @@ const StdButtonWrapper = styled.button`
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
 `;
 
-export const GeoLocationButton: React.FC<GeoLocationButtonProps> = ({ className }: GeoLocationButtonProps) => {
+export const GeoLocationButton: React.FC<GeoLocationButtonProps> = ({
+  className,
+  handleClick,
+}: GeoLocationButtonProps) => {
   return (
-    <StdButtonWrapper className={className} title={'현위치'}>
+    <StdButtonWrapper className={className} title={'현위치'} onClick={() => handleClick()}>
       <LocationIcon></LocationIcon>
     </StdButtonWrapper>
   );

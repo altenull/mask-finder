@@ -1,6 +1,6 @@
 import '../../../assets/styles/custome-over-lay.css';
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { isArray } from 'util';
 
@@ -57,6 +57,8 @@ export const MapContainer: React.FC = () => {
     toggleStockFilter,
   }: MapContextState = useContext(MapContext);
 
+  const [canUseGeoLocation, setCanUseGeoLocation] = useState(false);
+
   const initMap = () => {
     const container: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID);
 
@@ -79,6 +81,8 @@ export const MapContainer: React.FC = () => {
 
   useEffect(() => {
     initMap();
+
+    setCanUseGeoLocation(!!navigator.geolocation);
   }, []);
 
   useEffect(() => {
@@ -154,13 +158,24 @@ export const MapContainer: React.FC = () => {
     }
   }, [maskStores, shouldFilterOnlyInStock]);
 
+  const getCurrentCoordinates = () => {
+    navigator.geolocation.getCurrentPosition((position: Position) => {
+      console.log('position.coords.latitude', position.coords.latitude);
+      console.log('position.coords.longitude', position.coords.longitude);
+      updateMapCoordinates({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+    });
+  };
+
   return (
     <StdMapPositioner>
       <StdFilterButton onClick={() => toggleStockFilter()}>
         {shouldFilterOnlyInStock ? 'In Stock' : 'All'}
       </StdFilterButton>
 
-      <StdGeoLocationButton />
+      {canUseGeoLocation && <StdGeoLocationButton handleClick={getCurrentCoordinates} />}
       <FullSizeMap />
     </StdMapPositioner>
   );
