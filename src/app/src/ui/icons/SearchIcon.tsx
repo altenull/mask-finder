@@ -5,8 +5,8 @@ import { inlineColors } from '../inline-styles';
 export const SearchIcon: React.FC = () => {
   return (
     <svg
-      stroke={inlineColors.gray2}
-      fill={inlineColors.gray2}
+      stroke={inlineColors.gray1}
+      fill={inlineColors.gray1}
       strokeWidth='0'
       viewBox='0 0 16 16'
       height='20'

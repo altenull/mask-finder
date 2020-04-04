@@ -21,6 +21,7 @@ export const inlineZIndex = {
 };
 
 export const inlineColors = {
+  primary: '#5e72e4',
   gray0: '#eeeeee',
   gray1: '#cccccc',
   gray2: '#999999',
