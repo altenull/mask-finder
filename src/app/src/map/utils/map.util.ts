@@ -72,11 +72,14 @@ export const getMaskStoreTooltipContent = ({
     [RemainStatus.Empty]: '없음(1개 이하)',
   };
   const findRouteLink: string = `https://map.kakao.com/link/to/${name},${latitude},${longitude}`;
+  const closeIcon: string = `<svg stroke="#999999" fill="#999999" stroke-width="0" viewBox="0 0 24 24" width="28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>`;
 
   return `
     <div class="mask-store-tooltip">
       <div class="mask-store-tooltip__top-group">
-        <button class="mask-store-tooltip__close-button" onclick="removeMaskStoreTooltip()">X</button>
+        <i class="mask-store-tooltip__close-icon" onclick="removeMaskStoreTooltip()" >
+          ${closeIcon}
+        </i>
         <h2 class="mask-store-tooltip__name">${name}</h2>
         <p class="mask-store-tooltip__address">${roadAddress}</p>
         <a class="mask-store-tooltip__find-route" href="${findRouteLink}" rel="noopener" target="_blank">길찾기</a>

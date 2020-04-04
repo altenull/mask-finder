@@ -50,17 +50,18 @@
   height: 0;
 }
 
-.mask-store-tooltip__close-button {
+.mask-store-tooltip__close-icon {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 24px;
-  height: 24px;
-  padding: 0;
+  top: 12px;
+  right: 10px;
+  cursor: pointer;
 }
 
 .mask-store-tooltip__name {
   margin-bottom: 16px;
+  max-width: 228px;
+  text-overflow: ellipsis;
+  overflow: auto;
 }
 
 .mask-store-tooltip__address {
