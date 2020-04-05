@@ -152,6 +152,7 @@ export const MapContainer: React.FC = () => {
         window.kakao.maps.event.addListener(marker, 'click', function() {
           removeOverLaiesFromMap();
           showOverlayOfSelectedMarker(index, kakaoMap);
+
           kakaoMap.panTo(marker.getPosition());
         });
       });
@@ -160,8 +161,6 @@ export const MapContainer: React.FC = () => {
 
   const getCurrentCoordinates = () => {
     navigator.geolocation.getCurrentPosition((position: Position) => {
-      console.log('position.coords.latitude', position.coords.latitude);
-      console.log('position.coords.longitude', position.coords.longitude);
       updateMapCoordinates({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
