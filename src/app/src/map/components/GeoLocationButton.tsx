@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { LocationIcon } from '../../ui/icons';
+import { inlineStyles } from '../../ui/inline-styles';
 
 interface GeoLocationButtonProps {
   className?: string;
@@ -16,7 +17,7 @@ const StdButtonWrapper = styled.button`
   outline: none;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: ${inlineStyles.boxShadow.boxShadow2};
 `;
 
 export const GeoLocationButton: React.FC<GeoLocationButtonProps> = ({
