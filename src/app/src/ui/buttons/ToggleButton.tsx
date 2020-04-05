@@ -3,8 +3,10 @@ import styled from 'styled-components';
 
 import { inlineColors, inlineStyles } from '../inline-styles';
 
+// TODO: Refactor handleClick
 interface ToggleButtonProps {
   items: string[];
+  handleClick: any;
 }
 
 interface StdToggleButtonItemProps {
@@ -30,10 +32,11 @@ const StdToggleButtonItem = styled.span`
   font-size: 0.875rem;
   padding: 0 16px;
   cursor: pointer;
-  border-radius: ${(props: StdToggleButtonItemProps) =>
-    props.isFirstItem ? '4px 0 0 4px' : props.isLastItem ? '0 4px 4px 0' : 'initial'};
-  color: ${(props: StdToggleButtonItemProps) => (props.isSelected ? '#ffffff' : inlineColors.gray4)};
-  background-color: ${(props: StdToggleButtonItemProps) => (props.isSelected ? inlineColors.primary : '#ffffff')};
+  border-radius: ${({ isFirstItem, isLastItem, ...rest }: StdToggleButtonItemProps) =>
+    isFirstItem ? '4px 0 0 4px' : isLastItem ? '0 4px 4px 0' : 'initial'};
+  color: ${({ isSelected, ...rest }: StdToggleButtonItemProps) => (isSelected ? '#ffffff' : inlineColors.gray4)};
+  background-color: ${({ isSelected, ...rest }: StdToggleButtonItemProps) =>
+    isSelected ? inlineColors.primary : '#ffffff'};
   transition: all 0.15s ease;
 `;
 
@@ -43,8 +46,13 @@ const StdDividier = styled.span`
   background-color: ${inlineColors.gray2};
 `;
 
-export const ToggleButton: React.FC<ToggleButtonProps> = ({ items = [] }: ToggleButtonProps) => {
+export const ToggleButton: React.FC<ToggleButtonProps> = ({ items = [], handleClick }: ToggleButtonProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const selectToggleItem = (index: number) => {
+    setSelectedIndex(index);
+    handleClick(index);
+  };
 
   const lastIndexOfItems: number = items.length - 1;
   const toggleButtonItems = items.map((toggleButtonItem: string, index: number) => (
@@ -54,7 +62,7 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({ items = [] }: Toggle
         isSelected={selectedIndex === index}
         isFirstItem={index === 0}
         isLastItem={index === lastIndexOfItems}
-        onClick={() => setSelectedIndex(index)}>
+        onClick={() => selectToggleItem(index)}>
         {toggleButtonItem}
       </StdToggleButtonItem>
       {index < lastIndexOfItems && <StdDividier></StdDividier>}

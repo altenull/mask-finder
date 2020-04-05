@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useState } from 'react';
 
+import { StockFilterType } from '../../map/enums/stock-filter-type.enum';
 import { MapCoordinates } from '../../map/models/map';
 
 export interface MapContextState {
@@ -7,8 +8,8 @@ export interface MapContextState {
   initKakaoMap: (kakaoMap: any) => void;
   mapCoordinates: MapCoordinates;
   updateMapCoordinates: (mapCoordinates: MapCoordinates) => void;
-  shouldFilterOnlyInStock: boolean;
-  toggleStockFilter: () => void;
+  selectedStockFilterType: StockFilterType;
+  selectStockFilter: (selectedStockFilterType: StockFilterType) => void;
 }
 
 const DEFAULT_KAKAO_MAP: null = null;
@@ -22,8 +23,8 @@ const initialState = {
   initKakaoMap: (kakaoMap: any) => {},
   mapCoordinates: DEFAULT_MAP_COORDINATES,
   updateMapCoordinates: (mapCoordinates: MapCoordinates) => {},
-  shouldFilterOnlyInStock: false,
-  toggleStockFilter: () => {},
+  selectedStockFilterType: StockFilterType.All,
+  selectStockFilter: (selectedStockFilterType: StockFilterType) => {},
 };
 
 export const MapContext = createContext<MapContextState>(initialState);
@@ -31,7 +32,7 @@ export const MapContext = createContext<MapContextState>(initialState);
 export const MapProvider = ({ children }: { children: ReactNode }) => {
   const [kakaoMap, setKakaoMap] = useState(DEFAULT_KAKAO_MAP);
   const [mapCoordinates, setMapCoordinates] = useState<MapCoordinates>(DEFAULT_MAP_COORDINATES);
-  const [shouldFilterOnlyInStock, setShouldFilterOnlyInStock] = useState<boolean>(false);
+  const [selectedStockFilterType, setSelectedStockFilterType] = useState<StockFilterType>(StockFilterType.All);
 
   const initKakaoMap = (kakaoMap: any) => {
     setKakaoMap(kakaoMap);
@@ -41,8 +42,8 @@ export const MapProvider = ({ children }: { children: ReactNode }) => {
     setMapCoordinates(mapCoordinates);
   };
 
-  const toggleStockFilter = () => {
-    setShouldFilterOnlyInStock(!shouldFilterOnlyInStock);
+  const selectStockFilter = (selectedStockFilterType: StockFilterType) => {
+    setSelectedStockFilterType(selectedStockFilterType);
   };
 
   return (
@@ -52,8 +53,8 @@ export const MapProvider = ({ children }: { children: ReactNode }) => {
         initKakaoMap,
         mapCoordinates,
         updateMapCoordinates,
-        shouldFilterOnlyInStock,
-        toggleStockFilter,
+        selectedStockFilterType,
+        selectStockFilter,
       }}>
       {children}
     </MapContext.Provider>

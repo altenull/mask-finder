@@ -8,8 +8,10 @@ import { MapContext, MapContextState } from '../../core/contexts';
 import { RemainStatus } from '../../mask-finder-api/enums/remain-status.enum';
 import { useGetMaskStores } from '../../mask-finder-api/hooks/mask-store.hook';
 import { MaskStoreVM } from '../../mask-finder-api/models/mask-store';
+import { ToggleButton } from '../../ui/buttons';
 import { inlineZIndex } from '../../ui/inline-styles';
 import { FullSizeMap, GeoLocationButton } from '../components';
+import { StockFilterType } from '../enums/stock-filter-type.enum';
 import { MaskStoreMarker } from '../models/map';
 import {
   createKakaoLatLngInstance,
@@ -29,12 +31,10 @@ const StdMapPositioner = styled.div`
   z-index: ${inlineZIndex.map};
 `;
 
-const StdFilterButton = styled.button`
+const StdStockFilterPositioner = styled.div`
   position: absolute;
-  right: 0;
+  right: 8px;
   top: 16px;
-  width: 80px;
-  height: 40px;
   z-index: 1000;
 `;
 
@@ -53,8 +53,8 @@ export const MapContainer: React.FC = () => {
     initKakaoMap,
     mapCoordinates,
     updateMapCoordinates,
-    shouldFilterOnlyInStock,
-    toggleStockFilter,
+    selectedStockFilterType,
+    selectStockFilter,
   }: MapContextState = useContext(MapContext);
 
   const [canUseGeoLocation, setCanUseGeoLocation] = useState(false);
@@ -123,14 +123,15 @@ export const MapContainer: React.FC = () => {
       removeMarkersFromMap();
       removeOverLaiesFromMap();
 
-      const filterdMaskStores: MaskStoreVM[] = shouldFilterOnlyInStock
-        ? maskStores.filter(
-            (maskStore: MaskStoreVM) =>
-              maskStore.remainStatus === RemainStatus.Plenty ||
-              maskStore.remainStatus === RemainStatus.Some ||
-              maskStore.remainStatus === RemainStatus.Few
-          )
-        : maskStores;
+      const filterdMaskStores: MaskStoreVM[] =
+        selectedStockFilterType === StockFilterType.OnlyInStock
+          ? maskStores.filter(
+              (maskStore: MaskStoreVM) =>
+                maskStore.remainStatus === RemainStatus.Plenty ||
+                maskStore.remainStatus === RemainStatus.Some ||
+                maskStore.remainStatus === RemainStatus.Few
+            )
+          : maskStores;
       const maskStoreMarkers: MaskStoreMarker[] = getMaskStoreMarkers(filterdMaskStores);
 
       window.markers = maskStoreMarkers.map((maskStoreMarker: MaskStoreMarker) =>
@@ -157,7 +158,7 @@ export const MapContainer: React.FC = () => {
         });
       });
     }
-  }, [maskStores, shouldFilterOnlyInStock]);
+  }, [maskStores, selectedStockFilterType]);
 
   const getCurrentCoordinates = () => {
     navigator.geolocation.getCurrentPosition((position: Position) => {
@@ -168,11 +169,17 @@ export const MapContainer: React.FC = () => {
     });
   };
 
+  const stockFilterTypes: StockFilterType[] = [StockFilterType.All, StockFilterType.OnlyInStock];
+
+  const selectStockFilterWrapper = (selectedIndex: number) => {
+    selectStockFilter(stockFilterTypes[selectedIndex]);
+  };
+
   return (
     <StdMapPositioner>
-      <StdFilterButton onClick={() => toggleStockFilter()}>
-        {shouldFilterOnlyInStock ? 'In Stock' : 'All'}
-      </StdFilterButton>
+      <StdStockFilterPositioner>
+        <ToggleButton items={stockFilterTypes} handleClick={selectStockFilterWrapper}></ToggleButton>
+      </StdStockFilterPositioner>
 
       {canUseGeoLocation && <StdGeoLocationButton handleClick={getCurrentCoordinates} />}
       <FullSizeMap />
