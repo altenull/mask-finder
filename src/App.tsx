@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
+import { MaskFinderLogo } from './app/src/core/components';
 import { MapProvider } from './app/src/core/contexts';
 import { DevelopmentContainer } from './app/src/development/containers/Development.container';
 import { MapContainer } from './app/src/map/containers/Map.container';
@@ -64,6 +65,10 @@ const StdPageHeader = styled.header`
   border-bottom: 1px solid ${inlineColors.gray1};
 `;
 
+const StdMaskFinderLogo = styled(MaskFinderLogo)`
+  margin-right: 16px;
+`;
+
 const StdPageBody = styled.section`
   position: relative;
   display: block;
@@ -77,6 +82,7 @@ const App: React.FC = () => {
       <GlobalStyle />
       <MapProvider>
         <StdPageHeader>
+          <StdMaskFinderLogo />
           <SearchContainer />
         </StdPageHeader>
         <StdPageBody>
