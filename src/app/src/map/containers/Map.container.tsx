@@ -59,7 +59,8 @@ export const MapContainer: React.FC = () => {
 
   const [canUseGeoLocation, setCanUseGeoLocation] = useState(false);
 
-  const initMap = () => {
+  // Initialize map container
+  useEffect(() => {
     const container: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID);
 
     if (container != null) {
@@ -77,10 +78,6 @@ export const MapContainer: React.FC = () => {
 
       initKakaoMap(map);
     }
-  };
-
-  useEffect(() => {
-    initMap();
 
     setCanUseGeoLocation(!!navigator.geolocation);
   }, []);
@@ -112,7 +109,7 @@ export const MapContainer: React.FC = () => {
     }
   };
 
-  const showOverlayOfSelectedMarker = (index: number, kakaoMap: any) => {
+  const showMaskStoreTooltipOfSelectedMarker = (index: number, kakaoMap: any) => {
     if (isArray(window.overLaies)) {
       window.overLaies[index].setMap(kakaoMap);
     }
@@ -152,7 +149,7 @@ export const MapContainer: React.FC = () => {
       window.markers.forEach((marker: any, index: number) => {
         window.kakao.maps.event.addListener(marker, 'click', function() {
           removeOverLaiesFromMap();
-          showOverlayOfSelectedMarker(index, kakaoMap);
+          showMaskStoreTooltipOfSelectedMarker(index, kakaoMap);
 
           kakaoMap.panTo(marker.getPosition());
         });
