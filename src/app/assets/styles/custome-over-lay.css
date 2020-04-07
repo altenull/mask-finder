@@ -1,6 +1,6 @@
 .mask-store-tooltip {
   position: relative;
-  width: 280px;
+  width: 256px;
   height: auto;
   border-radius: 8px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -43,7 +43,7 @@
 }
 
 .mask-store-tooltip__diagonal-divider {
-  border-width: 0 0 80px 280px;
+  border-width: 0 0 80px 256px;
   border-color: transparent transparent #e9ecee #f8f9fa;
   border-style: solid;
   width: 0;
@@ -69,6 +69,7 @@
   font-size: 0.8125rem;
   display: block;
   white-space: normal;
+  color: #666666;
 }
 
 .mask-store-tooltip__find-route {
@@ -93,12 +94,9 @@
   transform: translateY(-16px);
 }
 
-.mask-store-tooltip__stock-time {
-  font-size: 0.8125rem;
-  text-align: right;
-}
-
+.mask-store-tooltip__stock-time,
 .mask-store-tooltip__update-time {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   text-align: right;
+  color: #666666;
 }
