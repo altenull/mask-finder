@@ -9,7 +9,7 @@ const getMaskStores = async ({
   mapCoordinates: { latitude, longitude },
   distance,
 }: GetMaskStoresRequest): Promise<MaskStoreVM[]> => {
-  const url: string = `${process.env.REACT_APP_CORONA19_MASKS_HOST}/corona19-masks/v1/storesByGeo/json?lat=${latitude}&lng=${longitude}&m=${distance}`;
+  const url: string = `https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat=${latitude}&lng=${longitude}&m=${distance}`;
 
   const { stores }: GetMaskStoresResponse = await fetch(url).then((response) => response.json());
   const maskStoresVM: MaskStoreVM[] = stores.map((maskStore: MaskStore) => parseMaskStoreVMFromMaskStore(maskStore));
