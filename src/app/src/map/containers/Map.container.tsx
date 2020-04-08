@@ -61,23 +61,30 @@ export const MapContainer: React.FC = () => {
 
   // Initialize map container
   useEffect(() => {
-    const container: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID);
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=eb6005ac02543944a42f30af0aa4752f&libraries=services';
+    document.head.appendChild(script);
 
-    if (container != null) {
-      const map = createKakaoMapInstance(container, mapCoordinates, MAP_MAX_LEVEL);
+    script.onload = () => {
+      const container: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID);
 
-      map.setMaxLevel(MAP_MAX_LEVEL);
+      if (container != null) {
+        const map = createKakaoMapInstance(container, mapCoordinates, MAP_MAX_LEVEL);
 
-      window.kakao.maps.event.addListener(map, 'dragend', () => {
-        const movedMapCenter = map.getCenter();
-        updateMapCoordinates({
-          latitude: movedMapCenter.getLat(),
-          longitude: movedMapCenter.getLng(),
+        map.setMaxLevel(MAP_MAX_LEVEL);
+
+        window.kakao.maps.event.addListener(map, 'dragend', () => {
+          const movedMapCenter = map.getCenter();
+          updateMapCoordinates({
+            latitude: movedMapCenter.getLat(),
+            longitude: movedMapCenter.getLng(),
+          });
         });
-      });
 
-      initKakaoMap(map);
-    }
+        initKakaoMap(map);
+      }
+    };
 
     setCanUseGeoLocation(!!navigator.geolocation);
   }, []);
