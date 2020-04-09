@@ -2,9 +2,8 @@ import '../../../assets/styles/custome-over-lay.css';
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { isArray } from 'util';
 
-import { MapContext, MapContextState } from '../../core/contexts';
+import { CoreContext, CoreContextState, MapContext, MapContextState } from '../../core/contexts';
 import { RemainStatus } from '../../mask-finder-api/enums/remain-status.enum';
 import { useGetMaskStores } from '../../mask-finder-api/hooks/mask-store.hook';
 import { MaskStoreVM } from '../../mask-finder-api/models/mask-store';
@@ -19,6 +18,9 @@ import {
   createKakaoMarkerInstance,
   getMaskStoreMarkers,
   getMaskStoreTooltipContent,
+  removeMarkersFromMap,
+  removeOverLaiesFromMap,
+  showMaskStoreTooltipOfSelectedMarker,
 } from '../utils/map.util';
 import { FULL_SIZE_MAP_ID, MAP_MAX_LEVEL } from '../variables/map.variables';
 
@@ -48,6 +50,7 @@ const StdGeoLocationButton = styled(GeoLocationButton)`
 `;
 
 export const MapContainer: React.FC = () => {
+  const { isKakaoMapLoaded }: CoreContextState = useContext(CoreContext);
   const {
     kakaoMap,
     initKakaoMap,
@@ -56,17 +59,11 @@ export const MapContainer: React.FC = () => {
     selectedStockFilterType,
     selectStockFilter,
   }: MapContextState = useContext(MapContext);
-
   const [canUseGeoLocation, setCanUseGeoLocation] = useState(false);
 
   // Initialize map container
   useEffect(() => {
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=eb6005ac02543944a42f30af0aa4752f&libraries=services';
-    document.head.appendChild(script);
-
-    script.onload = () => {
+    if (isKakaoMapLoaded) {
       const container: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID);
 
       if (container != null) {
@@ -84,10 +81,10 @@ export const MapContainer: React.FC = () => {
 
         initKakaoMap(map);
       }
-    };
+    }
 
     setCanUseGeoLocation(!!navigator.geolocation);
-  }, []);
+  }, [isKakaoMapLoaded]);
 
   useEffect(() => {
     if (kakaoMap != null) {
@@ -99,28 +96,6 @@ export const MapContainer: React.FC = () => {
     mapCoordinates,
     distance: 1000,
   });
-
-  const removeMarkersFromMap = () => {
-    if (isArray(window.markers)) {
-      window.markers.forEach((marker: any) => {
-        marker.setMap(null);
-      });
-    }
-  };
-
-  const removeOverLaiesFromMap = () => {
-    if (isArray(window.overLaies)) {
-      window.overLaies.forEach((overLay: any) => {
-        overLay.setMap(null);
-      });
-    }
-  };
-
-  const showMaskStoreTooltipOfSelectedMarker = (index: number, kakaoMap: any) => {
-    if (isArray(window.overLaies)) {
-      window.overLaies[index].setMap(kakaoMap);
-    }
-  };
 
   useEffect(() => {
     if (kakaoMap != null) {
