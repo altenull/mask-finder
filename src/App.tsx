@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import { MaskFinderLogo } from './app/src/core/components';
-import { MapProvider } from './app/src/core/contexts';
+import { CoreContext, CoreContextState, MapProvider } from './app/src/core/contexts';
 import { DevelopmentContainer } from './app/src/development/containers/Development.container';
 import { MapContainer } from './app/src/map/containers/Map.container';
 import { SearchContainer } from './app/src/search/containers/Search.container';
@@ -77,6 +77,12 @@ const StdPageBody = styled.section`
 `;
 
 const App: React.FC = () => {
+  const { loadkakaoMapComplete }: CoreContextState = useContext(CoreContext);
+
+  window.kakao.maps.load(() => {
+    loadkakaoMapComplete();
+  });
+
   return (
     <>
       <GlobalStyle />

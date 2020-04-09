@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import styled from 'styled-components';
 
 import { inlineColors, inlineStyles } from '../inline-styles';
@@ -56,9 +56,8 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({ items = [], handleCl
 
   const lastIndexOfItems: number = items.length - 1;
   const toggleButtonItems = items.map((toggleButtonItem: string, index: number) => (
-    <>
+    <Fragment key={index}>
       <StdToggleButtonItem
-        key={index}
         isSelected={selectedIndex === index}
         isFirstItem={index === 0}
         isLastItem={index === lastIndexOfItems}
@@ -66,7 +65,7 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({ items = [], handleCl
         {toggleButtonItem}
       </StdToggleButtonItem>
       {index < lastIndexOfItems && <StdDividier></StdDividier>}
-    </>
+    </Fragment>
   ));
 
   return <StdToggleButton>{toggleButtonItems}</StdToggleButton>;
