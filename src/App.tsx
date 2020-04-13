@@ -17,8 +17,6 @@ declare global {
 }
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500&display=swap&subset=korean');
-
   html, body {
     margin: 0;
     font-family: 'Noto Sans KR', Arial, sans-serif;
