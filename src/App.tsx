@@ -16,6 +16,8 @@ declare global {
   }
 }
 
+// An issue that styles are not applied on page in production
+// https://github.com/styled-components/styled-components/issues/2911#issuecomment-592012166
 const GlobalStyle = createGlobalStyle`
   html, body {
     margin: 0;
