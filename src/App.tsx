@@ -23,7 +23,7 @@ const GlobalStyle = createGlobalStyle`
   html, body {
     margin: 0;
     font-family: 'Noto Sans KR', Arial, sans-serif;
-    font-weight: ${inlineFontWeights.regular};
+    font-weight: ${inlineFontWeights.light};
     font-size: 16px;
     height: 100%;
     min-height: 100%;
@@ -32,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
 
   h1, h2, h3, h4, h5, h6 {
     margin: 0;
-    font-weight: ${inlineFontWeights.medium};
+    font-weight: ${inlineFontWeights.regular};
   }
 
   p {

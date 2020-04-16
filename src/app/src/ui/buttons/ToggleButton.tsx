@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import styled from 'styled-components';
 
-import { inlineColors, inlineStyles } from '../inline-styles';
+import { inlineColors, inlineFontWeights, inlineStyles } from '../inline-styles';
 
 // TODO: Refactor handleClick
 interface ToggleButtonProps {
@@ -30,6 +30,7 @@ const StdToggleButtonItem = styled.span`
   align-items: center;
   height: 100%;
   font-size: 0.875rem;
+  font-weight: ${inlineFontWeights.regular};
   padding: 0 16px;
   cursor: pointer;
   border-radius: ${({ isFirstItem, isLastItem, ...rest }: StdToggleButtonItemProps) =>
