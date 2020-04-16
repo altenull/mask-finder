@@ -83,7 +83,7 @@ const App: React.FC = () => {
     '//dapi.kakao.com/v2/maps/sdk.js?appkey=eb6005ac02543944a42f30af0aa4752f&libraries=services&autoload=false'
   );
 
-  if (isScriptLoaded) {
+  if (isScriptLoaded && !loadScriptError) {
     window.kakao.maps.load(() => {
       setIsKakaoMapLoaded(true);
     });
