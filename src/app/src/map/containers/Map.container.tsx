@@ -3,7 +3,7 @@ import '../../../assets/styles/custome-over-lay.css';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { CoreContext, CoreContextState, MapContext, MapContextState } from '../../core/contexts';
+import { MapContext, MapContextState } from '../../core/contexts';
 import { RemainStatus } from '../../mask-finder-api/enums/remain-status.enum';
 import { useGetMaskStores } from '../../mask-finder-api/hooks/mask-store.hook';
 import { MaskStoreVM } from '../../mask-finder-api/models/mask-store';
@@ -50,7 +50,6 @@ const StdGeoLocationButton = styled(GeoLocationButton)`
 `;
 
 export const MapContainer: React.FC = () => {
-  const { isKakaoMapLoaded }: CoreContextState = useContext(CoreContext);
   const {
     kakaoMap,
     initKakaoMap,
@@ -63,28 +62,26 @@ export const MapContainer: React.FC = () => {
 
   // Initialize map container
   useEffect(() => {
-    if (isKakaoMapLoaded) {
-      const container: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID);
+    const container: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID);
 
-      if (container != null) {
-        const map = createKakaoMapInstance(container, mapCoordinates, MAP_MAX_LEVEL);
+    if (container != null) {
+      const map = createKakaoMapInstance(container, mapCoordinates, MAP_MAX_LEVEL);
 
-        map.setMaxLevel(MAP_MAX_LEVEL);
+      map.setMaxLevel(MAP_MAX_LEVEL);
 
-        window.kakao.maps.event.addListener(map, 'dragend', () => {
-          const movedMapCenter = map.getCenter();
-          updateMapCoordinates({
-            latitude: movedMapCenter.getLat(),
-            longitude: movedMapCenter.getLng(),
-          });
+      window.kakao.maps.event.addListener(map, 'dragend', () => {
+        const movedMapCenter = map.getCenter();
+        updateMapCoordinates({
+          latitude: movedMapCenter.getLat(),
+          longitude: movedMapCenter.getLng(),
         });
+      });
 
-        initKakaoMap(map);
-      }
+      initKakaoMap(map);
     }
 
     setCanUseGeoLocation(!!navigator.geolocation);
-  }, [isKakaoMapLoaded]);
+  }, []);
 
   useEffect(() => {
     if (kakaoMap != null) {

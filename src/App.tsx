@@ -1,12 +1,13 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import { MaskFinderLogo } from './app/src/core/components';
-import { CoreContext, CoreContextState, MapProvider } from './app/src/core/contexts';
+import { MapProvider } from './app/src/core/contexts';
 import { DevelopmentContainer } from './app/src/development/containers/Development.container';
 import { MapContainer } from './app/src/map/containers/Map.container';
 import { SearchContainer } from './app/src/search/containers/Search.container';
 import { inlineColors, inlineFontWeights, inlineStyles } from './app/src/ui/inline-styles';
+import { useScript } from './app/src/utils/hooks';
 
 declare global {
   interface Window {
@@ -77,11 +78,16 @@ const StdPageBody = styled.section`
 `;
 
 const App: React.FC = () => {
-  const { loadkakaoMapComplete }: CoreContextState = useContext(CoreContext);
+  const [isKakaoMapLoaded, setIsKakaoMapLoaded] = useState(false);
+  const [isScriptLoaded, loadScriptError] = useScript(
+    '//dapi.kakao.com/v2/maps/sdk.js?appkey=eb6005ac02543944a42f30af0aa4752f&libraries=services&autoload=false'
+  );
 
-  window.kakao.maps.load(() => {
-    loadkakaoMapComplete();
-  });
+  if (isScriptLoaded) {
+    window.kakao.maps.load(() => {
+      setIsKakaoMapLoaded(true);
+    });
+  }
 
   return (
     <>
@@ -93,7 +99,8 @@ const App: React.FC = () => {
         </StdPageHeader>
         <StdPageBody>
           {process.env.NODE_ENV === 'development' && <DevelopmentContainer />}
-          <MapContainer />
+          {/* TODO: Show skeleton loading ui if kakao map is not ready */}
+          {isKakaoMapLoaded && <MapContainer />}
         </StdPageBody>
       </MapProvider>
     </>
