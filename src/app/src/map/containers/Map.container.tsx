@@ -33,6 +33,16 @@ const StdMapPositioner = styled.div`
   z-index: ${inlineZIndex.map};
 `;
 
+const StdMapLoadingLayer = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1100;
+`;
+
 const StdStockFilterPositioner = styled.div`
   position: absolute;
   right: 8px;
@@ -57,6 +67,9 @@ export const MapContainer: React.FC = () => {
     updateMapCoordinates,
     selectedStockFilterType,
     selectStockFilter,
+    isMapLoading,
+    startMapLoading,
+    stopMapLoading,
   }: MapContextState = useContext(MapContext);
   const [canUseGeoLocation, setCanUseGeoLocation] = useState(false);
 
@@ -137,12 +150,25 @@ export const MapContainer: React.FC = () => {
   }, [maskStores, selectedStockFilterType]);
 
   const getCurrentCoordinates = () => {
-    navigator.geolocation.getCurrentPosition((position: Position) => {
+    startMapLoading();
+
+    const onGetCurrentPositionSuccess = (position: Position) => {
+      stopMapLoading();
+
       updateMapCoordinates({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       });
-    });
+    };
+
+    // TODO: Set error type of getCurrentPosition
+    // https://developer.mozilla.org/ko/docs/Web/API/GeolocationPositionError
+    const onGetCurrentPositionError = (err: any) => {
+      stopMapLoading();
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    };
+
+    navigator.geolocation.getCurrentPosition(onGetCurrentPositionSuccess, onGetCurrentPositionError);
   };
 
   const stockFilterTypes: StockFilterType[] = [StockFilterType.All, StockFilterType.OnlyInStock];
@@ -153,6 +179,7 @@ export const MapContainer: React.FC = () => {
 
   return (
     <StdMapPositioner>
+      {isMapLoading && <StdMapLoadingLayer />}
       <StdStockFilterPositioner>
         <ToggleButton items={stockFilterTypes} handleClick={selectStockFilterWrapper}></ToggleButton>
       </StdStockFilterPositioner>

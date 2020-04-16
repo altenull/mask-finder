@@ -10,6 +10,9 @@ export interface MapContextState {
   updateMapCoordinates: (mapCoordinates: MapCoordinates) => void;
   selectedStockFilterType: StockFilterType;
   selectStockFilter: (selectedStockFilterType: StockFilterType) => void;
+  isMapLoading: boolean;
+  startMapLoading: () => void;
+  stopMapLoading: () => void;
 }
 
 const DEFAULT_KAKAO_MAP: null = null;
@@ -25,6 +28,9 @@ const initialState = {
   updateMapCoordinates: (mapCoordinates: MapCoordinates) => {},
   selectedStockFilterType: StockFilterType.All,
   selectStockFilter: (selectedStockFilterType: StockFilterType) => {},
+  isMapLoading: false,
+  startMapLoading: () => {},
+  stopMapLoading: () => {},
 };
 
 export const MapContext = createContext<MapContextState>(initialState);
@@ -33,6 +39,7 @@ export const MapProvider = ({ children }: { children: ReactNode }) => {
   const [kakaoMap, setKakaoMap] = useState(DEFAULT_KAKAO_MAP);
   const [mapCoordinates, setMapCoordinates] = useState<MapCoordinates>(DEFAULT_MAP_COORDINATES);
   const [selectedStockFilterType, setSelectedStockFilterType] = useState<StockFilterType>(StockFilterType.All);
+  const [isMapLoading, setIsMapLoading] = useState(false);
 
   const initKakaoMap = (kakaoMap: any) => {
     setKakaoMap(kakaoMap);
@@ -46,6 +53,14 @@ export const MapProvider = ({ children }: { children: ReactNode }) => {
     setSelectedStockFilterType(selectedStockFilterType);
   };
 
+  const startMapLoading = () => {
+    setIsMapLoading(true);
+  };
+
+  const stopMapLoading = () => {
+    setIsMapLoading(false);
+  };
+
   return (
     <MapContext.Provider
       value={{
@@ -55,6 +70,9 @@ export const MapProvider = ({ children }: { children: ReactNode }) => {
         updateMapCoordinates,
         selectedStockFilterType,
         selectStockFilter,
+        isMapLoading,
+        startMapLoading,
+        stopMapLoading,
       }}>
       {children}
     </MapContext.Provider>
