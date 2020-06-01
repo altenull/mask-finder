@@ -60,7 +60,7 @@
 
 .mask-store-tooltip__name {
   margin-bottom: 8px;
-  max-width: 228px;
+  max-width: 200px;
   text-overflow: ellipsis;
   line-height: 1;
   overflow: auto;
