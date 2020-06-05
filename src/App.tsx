@@ -79,11 +79,11 @@ const StdPageBody = styled.section`
 
 const App: React.FC = () => {
   const [isKakaoMapLoaded, setIsKakaoMapLoaded] = useState(false);
-  const [isScriptLoaded, loadScriptError] = useScript(
+  const [isKakaoMapScriptLoaded, kakaoMapScriptError] = useScript(
     '//dapi.kakao.com/v2/maps/sdk.js?appkey=fd6b4e1cfdb1be04fd09671bda9c3cff&libraries=services&autoload=false'
   );
 
-  if (isScriptLoaded && !loadScriptError) {
+  if (isKakaoMapScriptLoaded && !kakaoMapScriptError) {
     window.kakao.maps.load(() => {
       setIsKakaoMapLoaded(true);
     });
