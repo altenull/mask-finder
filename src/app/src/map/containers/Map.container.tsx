@@ -101,7 +101,7 @@ export const MapContainer: React.FC = () => {
   }, [kakaoMap, mapCoordinates]);
 
   // TODO: Handle getMaskStores API's loading, erorr status
-  const { maskStores, isGetMaskStoresLoading, getMaskStoresError } = useGetMaskStores(mapCoordinates);
+  const { maskStores } = useGetMaskStores(mapCoordinates);
 
   // Generate markers, overlaies
   useEffect(() => {
