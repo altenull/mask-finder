@@ -1,13 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 
-import { MapContext, MapContextState } from '../../core/contexts';
+import { MapContext, MapContextType, MapContextActionTypes } from '../../core/contexts';
 import { SearchInput } from '../components';
 import { Place, PlaceVM } from '../models/search';
 import { parsePlaceVMFromPlace } from '../utils/search.util';
+import { MapCoordinates } from '../../map/models/map';
 
 export const SearchContainer: React.FC = () => {
   const [keyword, setKeyword] = useState<string>('');
-  const { updateMapCoordinates }: MapContextState = useContext(MapContext);
+  const { mapDispatch }: MapContextType = useContext(MapContext);
+
+  const updateMapCoordinates = useCallback((callBackMapCoordinates: MapCoordinates) => 
+    mapDispatch({type: MapContextActionTypes.UpdateMapCoordinates, mapCoordinates: callBackMapCoordinates}), [mapDispatch]);
 
   useEffect(() => {
     if (!!keyword) {
@@ -16,13 +20,15 @@ export const SearchContainer: React.FC = () => {
       places.keywordSearch(keyword, (result: Place[], status: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const placesVM: PlaceVM[] = result.map((place: Place) => parsePlaceVMFromPlace(place));
-          if (placesVM.length > 0) {
+          const hasAtLeastOnePlace: boolean = placesVM.length > 0;
+
+          if (hasAtLeastOnePlace) {
             updateMapCoordinates(placesVM[0].coordinates);
           }
         }
       });
     }
-  }, [keyword]);
+  }, [keyword, updateMapCoordinates]);
 
   return <SearchInput setKeyword={setKeyword} />;
 };

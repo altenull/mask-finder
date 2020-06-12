@@ -25,11 +25,6 @@ export interface MaskStoreVM {
   updatedDateTime: string | null; // YYYY/MM/DD HH:mm:s
 }
 
-export interface GetMaskStoresRequest {
-  mapCoordinates: MapCoordinates;
-  distance: number; // Meter
-}
-
 export interface GetMaskStoresResponse {
   count: number;
   stores: MaskStore[];

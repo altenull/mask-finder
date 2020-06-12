@@ -8,6 +8,7 @@ import { RemainStatus } from '../../mask-finder-api/enums/remain-status.enum';
 import { MaskStoreVM } from '../../mask-finder-api/models/mask-store';
 import { inlineZIndex } from '../../ui/inline-styles';
 import { MapCoordinates, MaskStoreMarker } from '../models/map';
+import { StockFilterType } from '../enums/stock-filter-type.enum';
 
 export const createKakaoMapInstance = (container: HTMLElement, mapCoordinates: MapCoordinates, level: number) =>
   new window.kakao.maps.Map(container, {
@@ -109,7 +110,7 @@ export const removeMarkersFromMap = () => {
   }
 };
 
-export const removeOverLaiesFromMap = () => {
+export const removeTooltipsFromMap = () => {
   if (isArray(window.overLaies)) {
     window.overLaies.forEach((overLay: any) => {
       overLay.setMap(null);
@@ -117,8 +118,22 @@ export const removeOverLaiesFromMap = () => {
   }
 };
 
-export const showMaskStoreTooltipOfSelectedMarker = (index: number, kakaoMap: any) => {
+export const showSelectedMaskStoreTooltip = (index: number, kakaoMap: any) => {
   if (isArray(window.overLaies)) {
     window.overLaies[index].setMap(kakaoMap);
   }
 };
+
+export const getFilteredMaskStoreMarkers = (maskStores: MaskStoreVM[], selectedStockFilterType: StockFilterType): MaskStoreMarker[] => {
+  const filterdMaskStores: MaskStoreVM[] =
+    selectedStockFilterType === StockFilterType.OnlyInStock
+      ? maskStores.filter(
+          (maskStore: MaskStoreVM) =>
+            maskStore.remainStatus === RemainStatus.Plenty ||
+            maskStore.remainStatus === RemainStatus.Some ||
+            maskStore.remainStatus === RemainStatus.Few
+        )
+      : maskStores;
+
+return getMaskStoreMarkers(filterdMaskStores);
+}

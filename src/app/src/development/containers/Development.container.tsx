@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import { MapContext, MapContextState } from '../../core/contexts';
+import { MapContext, MapContextType } from '../../core/contexts';
 import { inlineZIndex } from '../../ui/inline-styles';
+import { MapCoordinates } from '../../map/models/map';
 
 const StdDevelopmentPositioner = styled.div`
   position: absolute;
@@ -14,7 +15,8 @@ const StdDevelopmentPositioner = styled.div`
 `;
 
 export const DevelopmentContainer: React.FC = () => {
-  const { mapCoordinates }: MapContextState = useContext(MapContext);
+  const { mapState }: MapContextType = useContext(MapContext);
+  const mapCoordinates: MapCoordinates = mapState.mapCoordinates;
 
   return (
     <StdDevelopmentPositioner>

@@ -1,28 +1,27 @@
 import '../../../assets/styles/custome-over-lay.css';
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 
-import { MapContext, MapContextState } from '../../core/contexts';
-import { RemainStatus } from '../../mask-finder-api/enums/remain-status.enum';
+import { MapContext, MapContextType, MapContextActionTypes } from '../../core/contexts';
 import { useGetMaskStores } from '../../mask-finder-api/hooks/mask-store.hook';
-import { MaskStoreVM } from '../../mask-finder-api/models/mask-store';
 import { ToggleButton } from '../../ui/buttons';
 import { inlineZIndex } from '../../ui/inline-styles';
 import { FullSizeMap, GeoLocationButton } from '../components';
 import { StockFilterType } from '../enums/stock-filter-type.enum';
-import { MaskStoreMarker } from '../models/map';
+import { MaskStoreMarker, MapCoordinates } from '../models/map';
 import {
   createKakaoLatLngInstance,
   createKakaoMapInstance,
   createKakaoMarkerInstance,
-  getMaskStoreMarkers,
   getMaskStoreTooltipContent,
   removeMarkersFromMap,
-  removeOverLaiesFromMap,
-  showMaskStoreTooltipOfSelectedMarker,
+  removeTooltipsFromMap,
+  showSelectedMaskStoreTooltip,
+  getFilteredMaskStoreMarkers,
 } from '../utils/map.util';
 import { FULL_SIZE_MAP_ID, MAP_MAX_LEVEL } from '../variables/map.variables';
+import { isArray } from 'util';
 
 const StdMapPositioner = styled.div`
   position: absolute;
@@ -60,25 +59,23 @@ const StdGeoLocationButton = styled(GeoLocationButton)`
 `;
 
 export const MapContainer: React.FC = () => {
-  const {
-    kakaoMap,
-    initKakaoMap,
-    mapCoordinates,
-    updateMapCoordinates,
-    selectedStockFilterType,
-    selectStockFilter,
-    isMapLoading,
-    startMapLoading,
-    stopMapLoading,
-  }: MapContextState = useContext(MapContext);
+  const { mapState, mapDispatch }: MapContextType = useContext(MapContext);
+  const [kakaoMap, setKakaoMap] = useState<any>(null);
+  const [isMapLoading, setIsMapLoading] = useState<boolean>(false);
   const [canUseGeoLocation, setCanUseGeoLocation] = useState(false);
+  const [selectedStockFilterType, setSelectedStockFilterType] = useState<StockFilterType>(StockFilterType.All);
 
-  // Initialize map container
+  const mapCoordinates: MapCoordinates = mapState.mapCoordinates;
+
+  const updateMapCoordinates = useCallback((callBackMapCoordinates: MapCoordinates) => 
+    mapDispatch({type: MapContextActionTypes.UpdateMapCoordinates, mapCoordinates: callBackMapCoordinates}), [mapDispatch]);
+
+  // Configure kakao map
   useEffect(() => {
-    const container: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID);
+    const fullSizeMapElement: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID)
 
-    if (container != null) {
-      const map = createKakaoMapInstance(container, mapCoordinates, MAP_MAX_LEVEL);
+    if (fullSizeMapElement != null && kakaoMap == null) {
+      const map = createKakaoMapInstance(fullSizeMapElement, mapCoordinates, MAP_MAX_LEVEL);
 
       map.setMaxLevel(MAP_MAX_LEVEL);
 
@@ -90,38 +87,42 @@ export const MapContainer: React.FC = () => {
         });
       });
 
-      initKakaoMap(map);
+      setKakaoMap(map);
     }
 
     setCanUseGeoLocation(!!navigator.geolocation);
-  }, []);
+  }, [kakaoMap, mapCoordinates, updateMapCoordinates]);
 
+  // Sync map center to updated map coordinates
   useEffect(() => {
     if (kakaoMap != null) {
       kakaoMap.panTo(createKakaoLatLngInstance(mapCoordinates));
     }
-  }, [mapCoordinates]);
+  }, [kakaoMap, mapCoordinates]);
 
-  const { maskStores, isGetMaskStoresLoading, getMaskStoresError } = useGetMaskStores({
-    mapCoordinates,
-    distance: 1000,
-  });
+  // TODO: Handle getMaskStores API's loading, erorr status
+  const { maskStores, isGetMaskStoresLoading, getMaskStoresError } = useGetMaskStores(mapCoordinates);
 
+  // Generate markers, overlaies
   useEffect(() => {
     if (kakaoMap != null) {
-      removeMarkersFromMap();
-      removeOverLaiesFromMap();
+      const markerClickEventHandler: (marker: any, index: number) => void = (marker: any, index: number) => {
+        removeTooltipsFromMap();
+        showSelectedMaskStoreTooltip(index, kakaoMap);
 
-      const filterdMaskStores: MaskStoreVM[] =
-        selectedStockFilterType === StockFilterType.OnlyInStock
-          ? maskStores.filter(
-              (maskStore: MaskStoreVM) =>
-                maskStore.remainStatus === RemainStatus.Plenty ||
-                maskStore.remainStatus === RemainStatus.Some ||
-                maskStore.remainStatus === RemainStatus.Few
-            )
-          : maskStores;
-      const maskStoreMarkers: MaskStoreMarker[] = getMaskStoreMarkers(filterdMaskStores);
+        kakaoMap.panTo(marker.getPosition());
+      }
+
+      if (isArray(window.markers)) {
+        window.markers.forEach((marker: any, index: number) => {
+          window.kakao.maps.event.removeListener(marker, 'click', () => markerClickEventHandler(marker, index));
+        });
+      }
+
+      removeTooltipsFromMap();
+      removeMarkersFromMap();
+
+      const maskStoreMarkers: MaskStoreMarker[] = getFilteredMaskStoreMarkers(maskStores, selectedStockFilterType);
 
       window.markers = maskStoreMarkers.map((maskStoreMarker: MaskStoreMarker) =>
         createKakaoMarkerInstance(maskStoreMarker, kakaoMap)
@@ -139,52 +140,48 @@ export const MapContainer: React.FC = () => {
       );
 
       window.markers.forEach((marker: any, index: number) => {
-        window.kakao.maps.event.addListener(marker, 'click', function() {
-          removeOverLaiesFromMap();
-          showMaskStoreTooltipOfSelectedMarker(index, kakaoMap);
-
-          kakaoMap.panTo(marker.getPosition());
-        });
+        window.kakao.maps.event.addListener(marker, 'click', () => markerClickEventHandler(marker, index));
       });
     }
-  }, [maskStores, selectedStockFilterType]);
+  }, [kakaoMap, maskStores, selectedStockFilterType]);
 
-  const getCurrentCoordinates = () => {
-    startMapLoading();
+  const getCurrentDeviceCoordinates = () => {
+    setIsMapLoading(true);
 
-    const onGetCurrentPositionSuccess = (position: Position) => {
-      stopMapLoading();
+    const onGetCurrentDevicePositionSuccess = ({ coords: { latitude, longitude } }: Position) => {
+      setIsMapLoading(false);
 
       updateMapCoordinates({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
+        latitude,
+        longitude,
       });
     };
 
     // TODO: Set error type of getCurrentPosition
     // https://developer.mozilla.org/ko/docs/Web/API/GeolocationPositionError
-    const onGetCurrentPositionError = (err: any) => {
-      stopMapLoading();
+    const onGetCurrentDevicePositionError = (err: any) => {
+      setIsMapLoading(false);
+
       console.warn(`ERROR(${err.code}): ${err.message}`);
     };
 
-    navigator.geolocation.getCurrentPosition(onGetCurrentPositionSuccess, onGetCurrentPositionError);
+    navigator.geolocation.getCurrentPosition(onGetCurrentDevicePositionSuccess, onGetCurrentDevicePositionError);
   };
 
-  const stockFilterTypes: StockFilterType[] = [StockFilterType.All, StockFilterType.OnlyInStock];
+  const STOCK_FILTER_TYPES: StockFilterType[] = [StockFilterType.All, StockFilterType.OnlyInStock];
 
-  const selectStockFilterWrapper = (selectedIndex: number) => {
-    selectStockFilter(stockFilterTypes[selectedIndex]);
+  const selectStockFilter = (selectedIndex: number) => {
+    setSelectedStockFilterType(STOCK_FILTER_TYPES[selectedIndex]);
   };
 
   return (
     <StdMapPositioner>
       {isMapLoading && <StdMapLoadingLayer />}
       <StdStockFilterPositioner>
-        <ToggleButton items={stockFilterTypes} handleClick={selectStockFilterWrapper}></ToggleButton>
+        <ToggleButton items={STOCK_FILTER_TYPES} handleClick={selectStockFilter}></ToggleButton>
       </StdStockFilterPositioner>
 
-      {canUseGeoLocation && <StdGeoLocationButton handleClick={getCurrentCoordinates} />}
+      {canUseGeoLocation && <StdGeoLocationButton handleClick={getCurrentDeviceCoordinates} />}
       <FullSizeMap />
     </StdMapPositioner>
   );
