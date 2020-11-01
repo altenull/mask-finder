@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-
 import { MaskFinderLogo } from './app/src/core/components';
 import { MapProvider } from './app/src/core/contexts';
 import { DevelopmentContainer } from './app/src/development/containers/Development.container';
@@ -82,6 +81,10 @@ const App: React.FC = () => {
   const [isKakaoMapScriptLoaded, kakaoMapScriptError] = useScript(
     `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_MAP_APP_KEY}&libraries=services&autoload=false`
   );
+
+  useEffect(() => {
+    alert('마스크파인더는 공적마스크 판매 중단에 따라 지원을 중단합니다.');
+  }, []);
 
   if (isKakaoMapScriptLoaded && !kakaoMapScriptError) {
     window.kakao.maps.load(() => {
