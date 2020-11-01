@@ -17,3 +17,7 @@
 <p align="center">
   <img src="./src/app/assets/images/mask-finder-demo.png" alt="mask finder demo" width="680">
 </p>
+
+## License
+
+Licensed under the [MIT](./LICENSE).
