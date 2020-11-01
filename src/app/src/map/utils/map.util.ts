@@ -1,5 +1,3 @@
-import { isArray } from 'util';
-
 import markerGray from '../../../assets/images/map/marker_gray.png';
 import markerGreen from '../../../assets/images/map/marker_green.png';
 import markerRed from '../../../assets/images/map/marker_red.png';
@@ -103,7 +101,7 @@ export const getMaskStoreTooltipContent = ({
 };
 
 export const removeMarkersFromMap = () => {
-  if (isArray(window.markers)) {
+  if (Array.isArray(window.markers)) {
     window.markers.forEach((marker: any) => {
       marker.setMap(null);
     });
@@ -111,7 +109,7 @@ export const removeMarkersFromMap = () => {
 };
 
 export const removeTooltipsFromMap = () => {
-  if (isArray(window.overLaies)) {
+  if (Array.isArray(window.overLaies)) {
     window.overLaies.forEach((overLay: any) => {
       overLay.setMap(null);
     });
@@ -119,7 +117,7 @@ export const removeTooltipsFromMap = () => {
 };
 
 export const showSelectedMaskStoreTooltip = (index: number, kakaoMap: any) => {
-  if (isArray(window.overLaies)) {
+  if (Array.isArray(window.overLaies)) {
     window.overLaies[index].setMap(kakaoMap);
   }
 };

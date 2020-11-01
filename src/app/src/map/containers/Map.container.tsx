@@ -21,7 +21,6 @@ import {
   getFilteredMaskStoreMarkers,
 } from '../utils/map.util';
 import { FULL_SIZE_MAP_ID, MAP_MAX_LEVEL } from '../variables/map.variables';
-import { isArray } from 'util';
 
 const StdMapPositioner = styled.div`
   position: absolute;
@@ -67,12 +66,15 @@ export const MapContainer: React.FC = () => {
 
   const mapCoordinates: MapCoordinates = mapState.mapCoordinates;
 
-  const updateMapCoordinates = useCallback((callBackMapCoordinates: MapCoordinates) => 
-    mapDispatch({type: MapContextActionTypes.UpdateMapCoordinates, mapCoordinates: callBackMapCoordinates}), [mapDispatch]);
+  const updateMapCoordinates = useCallback(
+    (callBackMapCoordinates: MapCoordinates) =>
+      mapDispatch({ type: MapContextActionTypes.UpdateMapCoordinates, mapCoordinates: callBackMapCoordinates }),
+    [mapDispatch]
+  );
 
   // Configure kakao map
   useEffect(() => {
-    const fullSizeMapElement: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID)
+    const fullSizeMapElement: HTMLElement | null = document.getElementById(FULL_SIZE_MAP_ID);
 
     if (fullSizeMapElement != null && kakaoMap == null) {
       const map = createKakaoMapInstance(fullSizeMapElement, mapCoordinates, MAP_MAX_LEVEL);
@@ -111,9 +113,9 @@ export const MapContainer: React.FC = () => {
         showSelectedMaskStoreTooltip(index, kakaoMap);
 
         kakaoMap.panTo(marker.getPosition());
-      }
+      };
 
-      if (isArray(window.markers)) {
+      if (Array.isArray(window.markers)) {
         window.markers.forEach((marker: any, index: number) => {
           window.kakao.maps.event.removeListener(marker, 'click', () => markerClickEventHandler(marker, index));
         });
